@@ -1,10 +1,10 @@
-﻿namespace OrderViewer.Service.OrderAPI.Models.Dto
+﻿namespace OrderViewer.Service.OrderAPI.Dtos
 {
     public class OrderDto
     {
         public Guid OrderId { get; set; }
-        public string Customer { get; set; }
-        public string Status { get; set; }
+        public string Customer { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
         public decimal Total { get; set; }
         public DateTime CreatedAt { get; set; }
     }
