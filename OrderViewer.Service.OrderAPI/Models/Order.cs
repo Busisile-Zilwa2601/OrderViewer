@@ -9,8 +9,8 @@ namespace OrderViewer.Service.OrderAPI.Models
         public Guid OrderId { get; set; } = Guid.NewGuid();
         
         [Required]
-        public string Customer { get; set; }
-        
+        public string Customer { get; set; } = null!;
+
         [Required]
         public OrderStatus Status { get; set; }
 
