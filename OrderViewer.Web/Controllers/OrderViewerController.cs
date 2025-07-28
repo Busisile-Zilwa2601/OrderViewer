@@ -19,6 +19,12 @@ namespace OrderViewer.Web.Controllers
         public async Task<IActionResult> OrderViewerIndex([FromQuery] OrderFilter orderFilter)
         {
             var orders = await _orderService.GetOrdersAsync(orderFilter);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_OrderTablePartial", orders); // Return partial view on AJAX
+            }
+
             ViewBag.Filter = orderFilter;
             ViewBag.StatusOptions = Enum.GetValues(typeof(OrderStatus))
                 .Cast<OrderStatus>()

@@ -1,0 +1,169 @@
+﻿/* Layout adjustments */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.col-9, .col-2 {
+    padding: 10px;
+}
+
+.col-9 {
+    flex: 0 0 75%;
+}
+
+.col-2 {
+    flex: 0 0 20%;
+}
+
+/* Table styles */
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+/*    table.table thead th {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-align: left;
+    }
+
+    table.table tbody td {
+        padding: 10px;
+        border-top: 1px solid #dee2e6;
+    }*/
+
+    table.table thead th,
+    table.table tbody td {
+        border: 1px solid #dee2e6;
+        padding: 5px 8px;
+        font-size: 14px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+/* Input fields */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Filter button */
+button.btn {
+    padding: 5px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+button.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pagination a {
+    padding: 6px 10px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.pagination a:hover {
+    background-color: #e9ecef;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Order summary */
+#order-summary {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#order-summary strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+#order-summary span {
+    font-weight: bold;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+    .col-9, .col-2 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    table.table thead {
+        display: none;
+    }
+
+    table.table, table.table tbody, table.table tr, table.table td {
+        display: block;
+        width: 100%;
+    }
+
+    table.table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        background: #fff;
+    }
+
+    table.table td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    table.table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        font-weight: bold;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    button.btn {
+        width: 100%;
+    }
+}
