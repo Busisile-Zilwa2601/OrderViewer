@@ -1,0 +1,13 @@
+﻿<div>
+	<div>
+		@foreach (var item in Model.Items)
+		{
+			<tr>
+				<td data-label="OrderId">@item.OrderId</td>
+				<td data-label="Customer">@item.Customer</td>
+				<td data-label="Status">@item.Status</td>
+				<td data-label="Total">@((item.Total).ToString("c"))</td>
+			</tr>
+		}
+	</div>
+</div>
