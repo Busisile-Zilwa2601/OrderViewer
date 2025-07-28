@@ -38,22 +38,14 @@ namespace OrderViewer.Service.OrderAPI.Services
         {
             var query = _orderService_DbContext.Orders.AsQueryable();
 
-            if(!string.IsNullOrEmpty(filter.Field) && !string.IsNullOrEmpty(filter.Value))
-            {
-                switch (filter.Field.ToLower())
-                {
-                    case "status":
-                        if (Enum.TryParse<OrderStatus>(filter.Value, true, out var statusEnum)) 
-                        {
-                            query = query.Where(o => o.Status == statusEnum);
-                        }
-                        break;
+            //if(!string.IsNullOrEmpty(filter.OrderId))
+            //    query = query.Where(o => o.OrderId.Contains(filter.OrderId));
 
-                    case "customer":
-                        query = query.Where(o => o.Customer.ToLower().Contains(filter.Value.ToLower()));
-                        break;
-                }
-            }
+            if (!string.IsNullOrEmpty(filter.Customer))
+                query = query.Where(o => o.Customer.Contains(filter.Customer));
+
+            if (!string.IsNullOrEmpty(filter.Status) && Enum.TryParse<OrderStatus>(filter.Status, out var statusEnum))
+                query = query.Where(o => o.Status == statusEnum);
 
             if (filter.FromDate.HasValue)
             {
