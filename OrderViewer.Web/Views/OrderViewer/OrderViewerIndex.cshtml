@@ -1,0 +1,68 @@
+﻿@model PaginatedOrders
+@{
+    var filter = ViewBag.Filter as OrderFilter;
+}
+
+<div class="row col-12">
+	<div class="col-9">
+		<form method="get" asp-action="OrderViewerIndex" onsubmit="return filterEmptyInputs(this)">
+			<table class="table">
+				<thead>
+					<tr>
+						<th><input type="text" name="OrderId" value="@filter?.OrderId" placeholder="Order ID" /></th>
+						<th><input type="text" name="Customer" value="@filter?.Customer" placeholder="Customer" /></th>
+						<th>
+							<select name="Status" class="form-control">
+								<option value="">All</option>
+								@foreach (var status in Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>())
+								{
+									var selected = filter?.Status == status.ToString() ? true : false;
+									<option value="@status" selected="@selected">@status</option>
+								}
+							</select>
+						</th>
+						<th><input type="number" name="Total" value="@filter?.Total" placeholder="Total" /></th>
+						<th><button type="submit" class="btn btn-sm btn-primary">Filter</button></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Items)
+					{
+						<tr>
+							<td>@item.OrderId</td>
+							<td>@item.Customer</td>
+							<td>@item.Status</td>
+							<td>@item.Total</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+
+			<div class="pagination">
+				@for (int i = 1; i <= Model.TotalPages; i++)
+				{
+					<a asp-action="Index"
+					   asp-route-PageNumber="@i"
+					   asp-route-PageSize="@Model.PageSize"
+					   asp-route-OrderId="@filter?.OrderId"
+					   asp-route-Customer="@filter?.Customer"
+					   asp-route-Status="@filter?.Status"
+					   asp-route-Total="@filter?.Total"
+					   class="@(i == Model.CurrentPage ? "active" : "")">
+						@i
+					</a>
+				}
+			</div>
+		</form>
+	</div>
+	<div class="col-2">
+		<div id="order-summary" class="mb-3">
+			<div><strong>Filtered Orders:</strong> <span id="order-count">0</span></div>
+			<div><strong>Grand Total:</strong> <span id="order-total">0</span></div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/js/widget-summary.js"></script>
+}

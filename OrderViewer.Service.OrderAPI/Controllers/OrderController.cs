@@ -4,8 +4,8 @@ using OrderViewer.Service.OrderAPI.Interfaces;
 
 namespace OrderViewer.Service.OrderAPI.Controllers
 {
+    [Route("api/order")]
     [ApiController]
-    [Route("[controller]")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
