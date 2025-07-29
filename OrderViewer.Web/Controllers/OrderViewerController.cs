@@ -55,5 +55,38 @@ namespace OrderViewer.Web.Controllers
 
             return Json(summary);
         }
+
+        public async Task<IActionResult> OrderCreate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OrderCreate(OrderDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                ResponseDto<OrderDto>? response = await _orderService.CreateOrderAysnc(model);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(OrderCreate));
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> OrderUpdate(OrderDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                ResponseDto<OrderDto>? response = await _orderService.UpdateOrderAysnc(model);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(OrderViewerIndex));
+                }
+            }
+            return View(model);
+        }
     }
 }

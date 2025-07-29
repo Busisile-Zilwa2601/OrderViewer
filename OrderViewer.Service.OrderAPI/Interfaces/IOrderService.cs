@@ -8,5 +8,7 @@ namespace OrderViewer.Service.OrderAPI.Interfaces
         Task<IEnumerable<OrderDto>> GetAllOrders();
 
         Task<PagedResult<OrderDto>> GetFilteredOrders(Filter filters);
+        Task<OrderDto> AddOrder(OrderDto orderDto);
+        Task<OrderDto> UpdateOrder(OrderDto orderDto);
     }
 }

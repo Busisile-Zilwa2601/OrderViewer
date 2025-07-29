@@ -42,6 +42,9 @@ namespace OrderViewer.Web.Services
                 ["PageSize"] = orderFilter.PageSize.ToString()
             };
 
+            if (!string.IsNullOrWhiteSpace(orderFilter.OrderId))
+                queryParams["OrderId"] = orderFilter.Status;
+
             if (!string.IsNullOrWhiteSpace(orderFilter.Status))
                 queryParams["Status"] = orderFilter.Status;
 
@@ -58,5 +61,33 @@ namespace OrderViewer.Web.Services
             return urlWithQuery;
         }
 
+        public Task<ResponseDto<OrderDto>?> GetOrderByIdAsync(Guid orderId)
+        {
+            return _baseService.SendAsync<OrderDto>(new RequestDto()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = SD.OrderAPIBase + "/api/order/" + orderId
+            });
+        }
+
+        public async Task<ResponseDto<OrderDto>?> CreateOrderAysnc(OrderDto orderDto)
+        {   
+            return await _baseService.SendAsync<OrderDto>(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                ApiUrl = SD.OrderAPIBase + "/api/order",
+                Data = orderDto
+            });
+        }
+
+        public async Task<ResponseDto<OrderDto>?> UpdateOrderAysnc(OrderDto orderDto)
+        {
+            return await _baseService.SendAsync<OrderDto>(new RequestDto()
+            {
+                ApiType = SD.ApiType.PATCH,
+                ApiUrl = SD.OrderAPIBase + "/api/order" + orderDto.OrderId,
+                Data = orderDto
+            });
+        }
     }
 }
