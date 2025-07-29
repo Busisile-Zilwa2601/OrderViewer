@@ -10,7 +10,7 @@ Features:
   - Total
   - Created Date Range
 - Pagination and sorting
-- Instant search (AJAX optional)
+- Instant search JavaScript Fetch
 - Responsive UI with Bootstrap
 - Entity Framework Core with SQL Server
 - Swagger-enabled API endpoints
