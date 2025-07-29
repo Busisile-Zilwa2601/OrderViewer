@@ -28,5 +28,45 @@ namespace OrderViewer.Service.OrderAPI.Controllers
             var result = await _orderService.GetFilteredOrders(filters);
             return Ok(result);
         }
+        [HttpPost]
+        public async Task<ActionResult<OrderDto>> AddOrder([FromBody] OrderDto orderDto)
+        {
+            if (orderDto == null)
+            {
+                return BadRequest("Order data is required.");
+            }
+            try
+            {
+                var createdOrder = await _orderService.AddOrder(orderDto);
+                return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.OrderId }, createdOrder);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateOrder(Guid id, [FromBody] OrderDto orderDto)
+        {
+            if (orderDto == null || id != orderDto.OrderId)
+            {
+                return BadRequest("Order data is invalid.");
+            }
+            try
+            {
+                var updatedOrder = await _orderService.UpdateOrder(orderDto);
+                return Ok(updatedOrder);
+
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Order with ID {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

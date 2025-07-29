@@ -4,6 +4,7 @@ using OrderViewer.Service.OrderAPI.ContextData;
 using OrderViewer.Service.OrderAPI.Interfaces;
 using OrderViewer.Service.OrderAPI.Dtos;
 using OrderViewer.Service.OrderAPI.Models;
+using Humanizer;
 
 namespace OrderViewer.Service.OrderAPI.Services
 {
@@ -38,8 +39,8 @@ namespace OrderViewer.Service.OrderAPI.Services
         {
             var query = _orderService_DbContext.Orders.AsQueryable();
 
-            //if(!string.IsNullOrEmpty(filter.OrderId))
-            //    query = query.Where(o => o.OrderId.Contains(filter.OrderId));
+            if (!string.IsNullOrEmpty(filter.OrderId))
+                query = query.Where(o => o.OrderId.ToString().Contains(filter.OrderId));
 
             if (!string.IsNullOrEmpty(filter.Customer))
                 query = query.Where(o => o.Customer.Contains(filter.Customer));
@@ -78,6 +79,50 @@ namespace OrderViewer.Service.OrderAPI.Services
                 CurrentPage = filter.PageNumber,
                 PageSize = filter.PageSize
             };
+        }
+
+        public async Task<OrderDto> AddOrder(OrderDto orderDto)
+        {
+            if (orderDto.OrderId != Guid.Empty)
+            {
+                var exists = await _orderService_DbContext.Orders.AnyAsync(o => o.OrderId == orderDto.OrderId);
+                if (exists)
+                {
+                    throw new InvalidOperationException($"Order with ID {orderDto.OrderId} already exists.");
+                }
+            }
+
+            var order = new Order
+            {
+                OrderId = orderDto.OrderId == Guid.Empty ? Guid.NewGuid() : orderDto.OrderId,
+                Customer = orderDto.Customer,
+                Status = Enum.Parse<OrderStatus>(orderDto.Status),
+                Total = orderDto.Total,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _orderService_DbContext.Add(order);
+            await _orderService_DbContext.SaveChangesAsync();
+
+            return _mapper.Map<OrderDto>(order);
+        }
+
+        public async Task<OrderDto> UpdateOrder(OrderDto orderDto)
+        {
+            var order = await _orderService_DbContext.Orders
+                .FirstOrDefaultAsync(o => o.OrderId == orderDto.OrderId);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order with ID {orderDto.OrderId} not found.");
+            }
+            order.Customer = orderDto.Customer;
+            order.Status = Enum.Parse<OrderStatus>(orderDto.Status);
+            order.Total = orderDto.Total;
+
+            _orderService_DbContext.Update(order);
+            await _orderService_DbContext.SaveChangesAsync();
+            
+            return _mapper.Map<OrderDto>(order);
         }
     }
 }
