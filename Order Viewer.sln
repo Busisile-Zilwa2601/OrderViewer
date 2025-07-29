@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderViewer.Service.OrderAP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderViewer.Web", "OrderViewer.Web\OrderViewer.Web.csproj", "{8637E076-4C96-4E69-9820-B9E4C24B4350}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8C7039AE-D634-4022-B1D9-0CCB82687EB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderViewer.Test", "OrderViewer.Test\OrderViewer.Test.csproj", "{9CE79765-53B2-492A-933C-5F0AE92BD340}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +32,10 @@ Global
 		{8637E076-4C96-4E69-9820-B9E4C24B4350}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8637E076-4C96-4E69-9820-B9E4C24B4350}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8637E076-4C96-4E69-9820-B9E4C24B4350}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CE79765-53B2-492A-933C-5F0AE92BD340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CE79765-53B2-492A-933C-5F0AE92BD340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CE79765-53B2-492A-933C-5F0AE92BD340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CE79765-53B2-492A-933C-5F0AE92BD340}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,5 +43,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{55D5908C-A079-4882-9E14-D9ECD452F810} = {92447AC8-62D3-407D-9B59-16704C127DE9}
 		{8637E076-4C96-4E69-9820-B9E4C24B4350} = {F954331C-5260-4F7F-B7D0-364C16387D86}
+		{9CE79765-53B2-492A-933C-5F0AE92BD340} = {8C7039AE-D634-4022-B1D9-0CCB82687EB9}
 	EndGlobalSection
 EndGlobal

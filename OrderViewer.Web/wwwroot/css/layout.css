@@ -111,7 +111,7 @@ button.btn-primary:hover {
 }
 
 #order-summary strong {
-    display: block;
+    display: inline-block;
     margin-bottom: 4px;
 }
 
