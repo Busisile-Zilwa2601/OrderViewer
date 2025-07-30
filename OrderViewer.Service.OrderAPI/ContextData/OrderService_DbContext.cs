@@ -3,7 +3,7 @@ using OrderViewer.Service.OrderAPI.Models;
 
 namespace OrderViewer.Service.OrderAPI.ContextData
 {
-    public class OrderService_DbContext: DbContext
+    public class OrderService_DbContext  : DbContext
     {
         public OrderService_DbContext(DbContextOptions<OrderService_DbContext> options): base(options)
         {
