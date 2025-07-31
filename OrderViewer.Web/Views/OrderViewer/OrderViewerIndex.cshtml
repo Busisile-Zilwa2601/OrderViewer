@@ -2,28 +2,29 @@
 @{
     var filter = ViewBag.Filter as OrderFilter;
 }
+
 <div class="row col-12">
-	<div class="col-6"></div>
-	<div class="col-6 text-end">
-		<a class="btn btn-outline-primary" asp-controller="OrderViewer" asp-action="OrderCreate">
-			<i class="bi bi-plus-square"></i>
-			Create New Order
-		</a>
-	</div>
-</div>
-<div class="row col-12">
-	<div class="col-9">
 		<form id="filter-form" method="get">
-			<div class="col-md-3">
-				<label for="fromDate">From Date</label>
-				<input type="date" id="fromDate" name="FromDate" class="form-control"
-					   value="@(filter?.FromDate?.ToString("yyyy-MM-dd"))" />
-			</div>
-			<div class="col-md-3">
-				<label for="toDate">To Date</label>
-				<input type="date" id="toDate" name="ToDate" class="form-control"
-					   value="@(filter?.ToDate?.ToString("yyyy-MM-dd"))" />
-			</div>
+			<div class="row mb-3">
+				<div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
+					<div class="d-flex flex-wrap gap-3">
+						<div>
+							<label for="fromDate">From Date</label>
+							<input type="date" id="fromDate" name="FromDate" class="form-control"
+								   value="@(filter?.FromDate?.ToString("yyyy-MM-dd"))" />
+						</div>
+						<div>
+							<label for="toDate">To Date</label>
+							<input type="date" id="toDate" name="ToDate" class="form-control"
+								   value="@(filter?.ToDate?.ToString("yyyy-MM-dd"))" />
+						</div>
+					</div>
+					<div id="order-summary" class="text-end mt-3 mt-md-0">
+						<div><strong>Filtered Orders:</strong> <span id="order-count">0</span></div>
+						<div><strong>Grand Total:</strong> <span id="order-total">0</span></div>
+					</div>
+				</div>
+			</div> 
 			<br />
 			<hr />
 			<table class="table">
@@ -32,8 +33,8 @@
 						<th>Order Id<input type="text" name="OrderId" value="@filter?.OrderId" placeholder="Order ID" /></th>
 						<th>Customer<input type="text" name="Customer" value="@filter?.Customer" placeholder="Customer" /></th>
 						<th>
+							Status
 							<select name="Status" class="form-control">
-								Status
 								<option value="">All</option>
 								@foreach (var status in Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>())
 								{
@@ -66,18 +67,16 @@
 			 		</a>
 			 	}
 			</div>
-		</form>
-
-		
-	</div>
-	<div class="col-2">
-		<div id="order-summary" class="mb-3">
-			<div><strong>Filtered Orders:</strong> <span id="order-count">0</span></div>
-			<div><strong>Grand Total:</strong> <span id="order-total">0</span></div>
-		</div>
+		</form>	
+</div>
+<div class="row col-12">
+	<div class="text-end">
+		<a class="btn btn-outline-primary" asp-controller="OrderViewer" asp-action="OrderCreate">
+			<i class="bi bi-plus-square"></i>
+			Create New Order
+		</a>
 	</div>
 </div>
-
 @section Scripts {
 	<script src="~/js/main.js"></script>
 	<script src="~/js/widget-summary.js"></script>
