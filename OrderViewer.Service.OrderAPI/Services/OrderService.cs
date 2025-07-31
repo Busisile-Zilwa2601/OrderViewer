@@ -4,20 +4,15 @@ using OrderViewer.Service.OrderAPI.ContextData;
 using OrderViewer.Service.OrderAPI.Interfaces;
 using OrderViewer.Service.OrderAPI.Dtos;
 using OrderViewer.Service.OrderAPI.Models;
-using Humanizer;
 
 namespace OrderViewer.Service.OrderAPI.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService(IMapper mapper, OrderService_DbContext orderService_DbContext, ILogger<OrderService> logger) : IOrderService
     {
-        private readonly IMapper _mapper;
-        private readonly OrderService_DbContext _orderService_DbContext;
+        private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        private readonly OrderService_DbContext _orderService_DbContext = orderService_DbContext ?? throw new ArgumentNullException(nameof(orderService_DbContext));
+        private readonly ILogger<OrderService> logger = logger;
 
-        public OrderService(IMapper mapper, OrderService_DbContext orderService_DbContext)
-        {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _orderService_DbContext = orderService_DbContext ?? throw new ArgumentNullException(nameof(orderService_DbContext));
-        }
         public async Task<IEnumerable<OrderDto>> GetAllOrders()
         {
             var orders = await _orderService_DbContext.Orders.ToListAsync();
@@ -30,6 +25,7 @@ namespace OrderViewer.Service.OrderAPI.Services
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
             if (order == null)
             {
+                this.logger.LogWarning("Order with ID {orderId} not found.", orderId);
                 throw new KeyNotFoundException($"Order with ID {orderId} not found.");
             }
             return _mapper.Map<OrderDto>(order);
@@ -86,8 +82,10 @@ namespace OrderViewer.Service.OrderAPI.Services
             if (orderDto.OrderId != Guid.Empty)
             {
                 var exists = await _orderService_DbContext.Orders.AnyAsync(o => o.OrderId == orderDto.OrderId);
+                this.logger.LogInformation("Checking order existance, orderId ={orderDto.OrderId }", orderDto.OrderId);
                 if (exists)
                 {
+                    this.logger.LogWarning("Order with ID {orderDto.OrderId} already exists.", orderDto.OrderId);
                     throw new InvalidOperationException($"Order with ID {orderDto.OrderId} already exists.");
                 }
             }
@@ -104,15 +102,20 @@ namespace OrderViewer.Service.OrderAPI.Services
             _orderService_DbContext.Add(order);
             await _orderService_DbContext.SaveChangesAsync();
 
+            this.logger.LogInformation("Order with ID {order.OrderId} added successfully to the database.", order.OrderId);
             return _mapper.Map<OrderDto>(order);
         }
 
         public async Task<OrderDto> UpdateOrder(OrderDto orderDto)
         {
+            this.logger.LogInformation("Updating order with ID {orderDto.OrderId} with data: {@orderDto}", orderDto.OrderId, orderDto);
+            
             var order = await _orderService_DbContext.Orders
                 .FirstOrDefaultAsync(o => o.OrderId == orderDto.OrderId);
+            
             if (order == null)
             {
+                this.logger.LogWarning("Order with ID {orderDto.OrderId} not found.", orderDto.OrderId);
                 throw new KeyNotFoundException($"Order with ID {orderDto.OrderId} not found.");
             }
             order.Customer = orderDto.Customer;
@@ -121,6 +124,7 @@ namespace OrderViewer.Service.OrderAPI.Services
 
             _orderService_DbContext.Update(order);
             await _orderService_DbContext.SaveChangesAsync();
+            this.logger.LogInformation("Order with ID {order.OrderId} updated successfully in the database.", order.OrderId);
             
             return _mapper.Map<OrderDto>(order);
         }

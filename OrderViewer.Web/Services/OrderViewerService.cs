@@ -34,7 +34,7 @@ namespace OrderViewer.Web.Services
         //url builder
         public string BuildOrderApiUrl(OrderFilter orderFilter)
         {
-            var baseUrl = "/api/order";
+            var baseUrl = "/api/order/filtered";
 
             var queryParams = new Dictionary<string, string?>
             {
@@ -85,7 +85,7 @@ namespace OrderViewer.Web.Services
             return await _baseService.SendAsync<OrderDto>(new RequestDto()
             {
                 ApiType = SD.ApiType.PATCH,
-                ApiUrl = SD.OrderAPIBase + "/api/order" + orderDto.OrderId,
+                ApiUrl = SD.OrderAPIBase + "/api/order",
                 Data = orderDto
             });
         }
