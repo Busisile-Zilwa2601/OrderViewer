@@ -1,13 +1,18 @@
 ﻿<div>
 	<div>
-		@foreach (var item in Model.Items)
+		@foreach (var order in Model.Items)
 		{
-			<tr>
-				<td data-label="OrderId">@item.OrderId</td>
-				<td data-label="Customer">@item.Customer</td>
-				<td data-label="Status">@item.Status</td>
-				<td data-label="Total">@((item.Total).ToString("c"))</td>
-				<td data-label="CreatedAt">@item.CreatedAt</td>
+			<tr style="cursor: pointer;" data-order-id="@order.OrderId" class="order-row">
+				<td data-label="OrderId">@order.OrderId</td>
+				<td data-label="Customer">@order.Customer</td>
+				<td data-label="Status">@order.Status</td>
+				<td data-label="Total">@((order.Total).ToString("c"))</td>
+				<td data-label="CreatedAt">@order.CreatedAt</td>
+			</tr>
+			<tr id="order-items-@order.OrderId" style="display: none; background-color: #f9f9f9;">
+				<td colspan="5" id="order-items-content-@order.OrderId">
+					<em>Loading...</em>
+				</td>
 			</tr>
 		}
 	</div>

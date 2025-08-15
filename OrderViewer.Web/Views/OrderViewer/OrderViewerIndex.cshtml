@@ -11,12 +11,12 @@
 						<div>
 							<label for="fromDate">From Date</label>
 							<input type="date" id="fromDate" name="FromDate" class="form-control"
-								   value="@(filter?.FromDate?.ToString("yyyy-MM-dd"))" />
+								   value="@(filter?.FromDate?.ToString("yyyy-MM-ddHH:mm:ss"))" />
 						</div>
 						<div>
 							<label for="toDate">To Date</label>
 							<input type="date" id="toDate" name="ToDate" class="form-control"
-								   value="@(filter?.ToDate?.ToString("yyyy-MM-dd"))" />
+							   value="@(filter?.ToDate?.ToString("yyyy-MM-ddHH:mm:ss"))" />
 						</div>
 					</div>
 					<div id="order-summary" class="text-end mt-3 mt-md-0">
@@ -29,11 +29,23 @@
 			<hr />
 			<table class="table">
 				<thead>
+					<!--Header row -->
 					<tr>
-						<th>Order Id<input type="text" name="OrderId" value="@filter?.OrderId" placeholder="Order ID" /></th>
-						<th>Customer<input type="text" name="Customer" value="@filter?.Customer" placeholder="Customer" /></th>
+						<th>Order Id</th>
+						<th>Customer</th>
+						<th>Status</th>
+						<th>Total</th>
+						<th>Created Date</th>
+					</tr>
+					<!--Filter row-->
+					<tr>
 						<th>
-							Status
+							<input type="text" name="OrderId" value="@filter?.OrderId" class="form-control" placeholder="Order ID" />
+						</th>
+						<th>
+							<input type="text" name="Customer" value="@filter?.Customer" class="form-control" placeholder="Customer" />
+						</th>
+						<th>
 							<select name="Status" class="form-control">
 								<option value="">All</option>
 								@foreach (var status in Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>())
@@ -43,8 +55,8 @@
 								}
 							</select>
 						</th>
-						<th>Total<input type="number" name="Total" value="@filter?.Total" placeholder="Total" /></th>
-						<th>Created Date</th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody id="results-container">
@@ -69,15 +81,16 @@
 			</div>
 		</form>	
 </div>
-<div class="row col-12">
+@* <div class="row col-12">
 	<div class="text-end">
 		<a class="btn btn-outline-primary" asp-controller="OrderViewer" asp-action="OrderCreate">
 			<i class="bi bi-plus-square"></i>
 			Create New Order
 		</a>
 	</div>
-</div>
+</div> *@
 @section Scripts {
 	<script src="~/js/main.js"></script>
 	<script src="~/js/widget-summary.js"></script>
+	<script src="~/js/OrderItems.js"></script>
 }
