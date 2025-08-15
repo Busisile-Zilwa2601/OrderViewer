@@ -28,9 +28,18 @@ namespace OrderViewer.Web.Controllers
         }
         public async Task<IActionResult> OrderViewerIndex([FromQuery] OrderFilter orderFilter)
         {
-            var orders = await _orderService.GetOrdersAsync(orderFilter);
+            // Ensure defaults
+            orderFilter.PageNumber = orderFilter.PageNumber <= 0 ? 1 : orderFilter.PageNumber;
+            orderFilter.PageSize = orderFilter.PageSize <= 0 ? 10 : orderFilter.PageSize;
             
+            var orders = await _orderService.GetOrdersAsync(orderFilter);
 
+            Console.WriteLine($"the total pages: {orders.TotalPages}");
+            if (orders.TotalPages > 0 && orderFilter.PageNumber > orders.TotalPages)
+            {
+                orderFilter.PageNumber = orders.TotalPages;
+                orders = await _orderService.GetOrdersAsync(orderFilter);
+            }
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return PartialView("_OrderTablePartial", orders); // Return partial view on AJAX
@@ -56,15 +65,27 @@ namespace OrderViewer.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrderSummary([FromQuery] OrderFilter filter)
         {
+            // Ensure defaults
+            filter.PageNumber = filter.PageNumber <= 0 ? 1 : filter.PageNumber;
+            filter.PageSize = filter.PageSize <= 0 ? 10 : filter.PageSize;
+            
+            Console.WriteLine($"filters: {filter.ToString()}");
             var orders = await _orderService.GetOrdersAsync(filter);
-
-            var summary = new
+            Console.WriteLine($"Orders: {orders}");
+            var summary = new OrderSummary
             {
-                count = orders.Items.Count,
-                grandTotal = orders.Items.Sum(o => o.Total)
+                Count = orders.Items.Count,
+                GrandTotal = orders.Items.Sum(o => o.Total)
             };
 
             return Json(summary);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOrderById(Guid orderId)
+        { 
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+            return Json(order);
         }
 
         public async Task<IActionResult> OrderCreate()
@@ -99,5 +120,21 @@ namespace OrderViewer.Web.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> MarkOrderAsPaid(Guid orderId)
+        {
+            var order = await _orderService.GetOrderByIdAsync(orderId);
+            if (order == null || !order.IsSuccess) 
+            {
+                return BadRequest("No order found");
+            }
+
+            order.Result.Status = OrderStatus.Paid.ToString();
+            await _orderService.UpdateOrderAysnc(order.Result);
+
+            return PartialView("_OrderRowPartial", order);
+        }
+
     }
 }

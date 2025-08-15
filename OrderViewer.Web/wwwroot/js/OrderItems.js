@@ -5,7 +5,6 @@
         if (!row) return;
 
         let orderId = row.getAttribute("data-order-id");
-        console.log("OrderId: ", orderId);
         toggleOrderItems(orderId);
     });
 });
@@ -34,4 +33,22 @@ function toggleOrderItems(orderId) {
         detailsRow.style.display = 'none';
     }
 
+}
+
+function markPaid(orderId) {
+    fetch(`/OrderViewer/MarkOrderPaid?orderId=${orderId}`, {
+        method: "POST",
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.text(); // partial HTML for the updated row
+        })
+        .then(html => {
+            // Replace the old row with the updated row
+            const row = document.getElementById(`order-${orderId}`);
+            console.log(`row: ${row}`);
+            row.outerHTML = html;
+        })
+        .catch(error => console.error("Error marking order paid:", error));
 }
