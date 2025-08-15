@@ -18,28 +18,13 @@ namespace OrderViewer.Web.Controllers
         }
         public async Task<IActionResult> GetOrderItems(Guid orderId)
         {
-            var allItems = new Dictionary<Guid,List<OrderItems>>
-            {
-               {Guid.Parse("F437E4FC-83ED-450E-B916-07B1595A138D"), new List<OrderItems>{
-                    new OrderItems {
-                        OrderId = Guid.Parse("F437E4FC-83ED-450E-B916-07B1595A138D"),
-                        Items = new List<OrderDetails>{
-                            new OrderDetails{
-                                Name = "Sonka",
-                                UnitPrice = 12m,
-                                Quantity = 2
-                            }
-                        }
-                    }
-
-                }}
-            };
-
+            var allItems = await _orderService.GetProductsByOrderId(orderId);
+           
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             { 
-                return PartialView("_OrderItems", allItems.ContainsKey(orderId) ? allItems[orderId] : new List<OrderItems>());
+                return PartialView("_OrderItems", allItems.Result);
             }
-            return PartialView("_OrderItems", allItems.ContainsKey(orderId) ? allItems[orderId] : new List<OrderItems>());
+            return PartialView("_OrderItems", allItems.Result);
         }
         public async Task<IActionResult> OrderViewerIndex([FromQuery] OrderFilter orderFilter)
         {
