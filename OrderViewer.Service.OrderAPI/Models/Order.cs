@@ -18,5 +18,6 @@ namespace OrderViewer.Service.OrderAPI.Models
         public decimal Total { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public ICollection<Product> Products { get; set; }
     }
 }

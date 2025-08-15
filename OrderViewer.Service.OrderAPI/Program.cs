@@ -13,9 +13,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<OrderService_DbContext>(option => option.UseSqlServer(connectionString));
 
 //Add custom logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
 var logPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs" ,"log.txt");
 if (!string.IsNullOrWhiteSpace(logPath)) 
 {
@@ -25,6 +22,8 @@ if (!string.IsNullOrWhiteSpace(logPath))
         Directory.CreateDirectory(directory);
     }
 }
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.Logging.AddProvider(new FileLoggerProvider(logPath));
 
 builder.Services.AddControllers();
@@ -33,6 +32,7 @@ IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProducService, ProductService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
