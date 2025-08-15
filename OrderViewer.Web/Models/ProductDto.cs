@@ -1,12 +1,12 @@
 ﻿namespace OrderViewer.Web.Models
 {
-    public class OrderItems
+    public class ProductDto
     {
         public Guid OrderId { get; set; }
-        public List<OrderDetails> Items { get; set; }
+        public List<ProductDetails> Products { get; set; }
     }
 
-    public class OrderDetails 
+    public class ProductDetails
     {
         public string Name { get; set; }
         public int Quantity { get; set; }

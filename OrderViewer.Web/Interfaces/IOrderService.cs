@@ -9,5 +9,6 @@ namespace OrderViewer.Web.Interfaces
         Task<ResponseDto<OrderDto>?> GetOrderByIdAsync(Guid orderId);
         Task<ResponseDto<OrderDto>?> CreateOrderAysnc(OrderDto orderDto);
         Task<ResponseDto<OrderDto>?> UpdateOrderAysnc(OrderDto orderDto);
+        Task<ResponseDto<ProductDto>?> GetProductsByOrderId(Guid orderId);
     }
 }
