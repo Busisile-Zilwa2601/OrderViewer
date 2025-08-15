@@ -43,7 +43,7 @@ namespace OrderViewer.Web.Services
             };
 
             if (!string.IsNullOrWhiteSpace(orderFilter.OrderId))
-                queryParams["OrderId"] = orderFilter.Status;
+                queryParams["OrderId"] = orderFilter.OrderId;
 
             if (!string.IsNullOrWhiteSpace(orderFilter.Status))
                 queryParams["Status"] = orderFilter.Status;

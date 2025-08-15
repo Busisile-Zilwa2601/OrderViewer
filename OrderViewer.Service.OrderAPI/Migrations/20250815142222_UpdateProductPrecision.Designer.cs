@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderViewer.Service.OrderAPI.ContextData;
 
@@ -11,9 +12,11 @@ using OrderViewer.Service.OrderAPI.ContextData;
 namespace OrderViewer.Service.OrderAPI.Migrations
 {
     [DbContext(typeof(OrderService_DbContext))]
-    partial class OrderService_DbContextModelSnapshot : ModelSnapshot
+    [Migration("20250815142222_UpdateProductPrecision")]
+    partial class UpdateProductPrecision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,8 +57,8 @@ namespace OrderViewer.Service.OrderAPI.Migrations
                     b.HasData(
                         new
                         {
-                            OrderId = new Guid("ea380f5a-59e8-42a8-8dde-4504bb2e0ab0"),
-                            CreatedAt = new DateTime(2025, 8, 15, 14, 25, 16, 260, DateTimeKind.Utc).AddTicks(1359),
+                            OrderId = new Guid("92ce28bd-2740-4e8a-ae93-723292301c2d"),
+                            CreatedAt = new DateTime(2025, 8, 15, 14, 22, 22, 66, DateTimeKind.Utc).AddTicks(118),
                             Customer = "Lewis Hamilton ",
                             Status = 0,
                             Total = 10000.00m
@@ -79,7 +82,6 @@ namespace OrderViewer.Service.OrderAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId");
@@ -91,25 +93,25 @@ namespace OrderViewer.Service.OrderAPI.Migrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("7d44223c-2f17-4ca6-aeaa-3d9b4f56311d"),
+                            ProductId = new Guid("e07d5ae8-6a80-4c24-9b8d-a1a63bc3d945"),
                             Name = "Laptop",
-                            OrderId = new Guid("ea380f5a-59e8-42a8-8dde-4504bb2e0ab0"),
+                            OrderId = new Guid("92ce28bd-2740-4e8a-ae93-723292301c2d"),
                             Quantity = 1,
                             UnitPrice = 8500m
                         },
                         new
                         {
-                            ProductId = new Guid("54b92b29-2652-427a-9a28-36623afc393d"),
+                            ProductId = new Guid("58ca1033-e6e1-4a92-bb64-97624b66044e"),
                             Name = "Mouse",
-                            OrderId = new Guid("ea380f5a-59e8-42a8-8dde-4504bb2e0ab0"),
+                            OrderId = new Guid("92ce28bd-2740-4e8a-ae93-723292301c2d"),
                             Quantity = 2,
                             UnitPrice = 250m
                         },
                         new
                         {
-                            ProductId = new Guid("bd9b617f-42ef-4e70-8bf9-dd2ea2625bab"),
+                            ProductId = new Guid("f4d3e8c6-5dfd-49d7-b9fb-dd511557949e"),
                             Name = "Keyboard",
-                            OrderId = new Guid("ea380f5a-59e8-42a8-8dde-4504bb2e0ab0"),
+                            OrderId = new Guid("92ce28bd-2740-4e8a-ae93-723292301c2d"),
                             Quantity = 2,
                             UnitPrice = 500m
                         });

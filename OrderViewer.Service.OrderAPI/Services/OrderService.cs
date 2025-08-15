@@ -50,7 +50,8 @@ namespace OrderViewer.Service.OrderAPI.Services
             }
             if (filter.ToDate.HasValue)
             {
-                query = query.Where(o => o.CreatedAt <= filter.ToDate.Value);
+                var upperBound = filter.ToDate.Value.Date.AddDays(1).AddTicks(-1);
+                query = query.Where(o => o.CreatedAt <= upperBound);
             }
 
             var items = await query
@@ -89,7 +90,6 @@ namespace OrderViewer.Service.OrderAPI.Services
                     throw new InvalidOperationException($"Order with ID {orderDto.OrderId} already exists.");
                 }
             }
-
             var order = new Order
             {
                 OrderId = orderDto.OrderId == Guid.Empty ? Guid.NewGuid() : orderDto.OrderId,

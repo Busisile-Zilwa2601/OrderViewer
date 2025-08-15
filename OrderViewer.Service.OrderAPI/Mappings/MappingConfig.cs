@@ -11,7 +11,16 @@ namespace OrderViewer.Service.OrderAPI.Mappings
             {
                 config.CreateMap<Order, OrderDto>().ReverseMap();
                 config.CreateMap<OrderDto, Order>().ReverseMap();
-                // Add more mappings as needed
+
+                // Entity -> DTO
+                config.CreateMap<Product, ProductDetails>();
+                config.CreateMap<Order, ProductDto>()
+                    .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+
+                // DTO -> Entity
+                config.CreateMap<ProductDetails, Product>();
+                config.CreateMap<ProductDto, Order>()
+                    .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
             });
             return mappingConfig;
         }

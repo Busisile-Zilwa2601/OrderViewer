@@ -1,0 +1,26 @@
+﻿@model List<OrderItems>
+
+<table class="table table-sm mb-0">
+	<thead>
+		<tr>
+			<th>Item</th>
+			<th>Qty</th>
+			<th>Unit Price</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				@foreach (var products in item.Items)
+				{
+					<td>@products.Name</td>
+					<td>@products.Quantity</td>
+					<td>@products.UnitPrice.ToString("C")</td>
+					<td>@((products.Quantity * products.UnitPrice).ToString("C"))</td>
+				}
+			</tr>
+		}
+	</tbody>
+</table>
