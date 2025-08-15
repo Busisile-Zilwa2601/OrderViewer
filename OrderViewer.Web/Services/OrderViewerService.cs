@@ -89,5 +89,14 @@ namespace OrderViewer.Web.Services
                 Data = orderDto
             });
         }
+
+        public async Task<ResponseDto<ProductDto>?> GetProductsByOrderId(Guid orderId)
+        {
+            return await _baseService.SendAsync<ProductDto>(new RequestDto()
+            {
+                ApiType = SD.ApiType.GET,
+                ApiUrl = SD.OrderAPIBase + "/api/product/" + orderId
+            });
+        }
     }
 }

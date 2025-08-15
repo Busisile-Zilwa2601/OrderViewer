@@ -1,4 +1,4 @@
-﻿@model List<OrderItems>
+﻿@model ProductDto
 
 <table class="table table-sm mb-0">
 	<thead>
@@ -10,17 +10,17 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in Model)
+		@if (Model?.Products != null && Model.Products.Any())
 		{
-			<tr>
-				@foreach (var products in item.Items)
-				{
+			@foreach (var products in Model.Products)
+			{
+				<tr>
 					<td>@products.Name</td>
 					<td>@products.Quantity</td>
 					<td>@products.UnitPrice.ToString("C")</td>
 					<td>@((products.Quantity * products.UnitPrice).ToString("C"))</td>
-				}
-			</tr>
+				</tr>
+			}
 		}
 	</tbody>
 </table>

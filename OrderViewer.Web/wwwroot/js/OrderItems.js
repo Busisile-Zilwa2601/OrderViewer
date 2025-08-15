@@ -11,7 +11,6 @@
 });
 function toggleOrderItems(orderId) {
     const detailsRow = document.getElementById(`order-items-${orderId}`);
-    console.log(detailsRow);
     if (!detailsRow) return;
 
     if (detailsRow.style.display === '' || detailsRow.style.display === 'none') {
