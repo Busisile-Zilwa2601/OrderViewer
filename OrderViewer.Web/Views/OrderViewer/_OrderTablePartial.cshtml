@@ -2,12 +2,18 @@
 	<div>
 		@foreach (var order in Model.Items)
 		{
-			<tr style="cursor: pointer;" data-order-id="@order.OrderId" class="order-row">
+			<tr style="cursor: pointer;" data-order-id="@order.OrderId" class="order-row" id="order-@order.OrderId">
 				<td data-label="OrderId">@order.OrderId</td>
 				<td data-label="Customer">@order.Customer</td>
 				<td data-label="Status">@order.Status</td>
 				<td data-label="Total">@((order.Total).ToString("c"))</td>
 				<td data-label="CreatedAt">@order.CreatedAt</td>
+				<td>
+					@if (order.Status != OrderStatus.Paid.ToString())
+					{
+						<button class="btn btn-sm btn-success" onclick="markPaid('@order.OrderId')">Mark Paid</button>
+					}
+				</td>
 			</tr>
 			<tr id="order-items-@order.OrderId" style="display: none; background-color: #f9f9f9;">
 				<td colspan="5" id="order-items-content-@order.OrderId">
