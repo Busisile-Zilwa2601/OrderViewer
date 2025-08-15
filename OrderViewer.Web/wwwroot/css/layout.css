@@ -25,6 +25,7 @@ table.table {
     margin-bottom: 20px;
     background-color: #fff;
     border: 1px solid #dee2e6;
+    overflow-y: scroll;
 }
 
 /*    table.table thead th {
@@ -74,6 +75,11 @@ button.btn-primary {
 
 button.btn-primary:hover {
     background-color: #0056b3;
+}
+
+button:active {
+    background-color: #d0d0d0;
+    transform: translateY(1px); /* slight “press” */
 }
 
 /* Pagination */

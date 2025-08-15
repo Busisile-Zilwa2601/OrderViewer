@@ -27,6 +27,16 @@
 			</div> 
 			<br />
 			<hr />
+			<div class="d-flex align-items-center gap-2 mb-3">
+				<label for="pageSize">Rows per page:</label>
+				<select id="pageSize" name="PageSize" class="form-select" style="width: auto;">
+					@foreach (var size in new[] { 5, 10, 20, 30 })
+					{
+					var selected = (filter?.PageSize ?? 10) == size;
+						<option value="@size" selected="@selected" >@size</option>
+					}
+				</select>
+			</div>
 			<table class="table">
 				<thead>
 					<!--Header row -->
@@ -64,19 +74,15 @@
 				</tbody>
 			</table>
 
-			<div class="pagination"> 
+		<div class="pagination">
 				@for (int i = 1; i <= Model.TotalPages; i++)
-		 		{ 
-			 		<a asp-action="Index"
-			 		   asp-route-PageNumber="@i"
-			 		   asp-route-PageSize="@Model.PageSize"
-			 		   asp-route-OrderId="@filter?.OrderId"
-			 		   asp-route-Customer="@filter?.Customer"
-			 		   asp-route-Status="@filter?.Status"
-			 		   asp-route-Total="@filter?.Total"
-			 		   class="@(i == Model.CurrentPage ? "active" : "")">
-			 			@i
-			 		</a>
+				{
+					Console.WriteLine($"Total pages {Model.TotalPages}");
+					<div id="pagination-container">
+						<button href="javascript:void(0);" class="page-link @(i == filter.PageNumber ? "active" : "")" data-page="@i">
+							@i
+			 			</button>
+					</div>
 			 	}
 			</div>
 		</form>	
