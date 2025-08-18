@@ -74,16 +74,8 @@
 				</tbody>
 			</table>
 
-		<div class="pagination">
-				@for (int i = 1; i <= Model.TotalPages; i++)
-				{
-					Console.WriteLine($"Total pages {Model.TotalPages}");
-					<div id="pagination-container">
-						<button href="javascript:void(0);" class="page-link @(i == filter.PageNumber ? "active" : "")" data-page="@i">
-							@i
-			 			</button>
-					</div>
-			 	}
+			<div id="pagination-container">
+				@await Html.PartialAsync("_PaginatingPartial", Model)
 			</div>
 		</form>	
 </div>
