@@ -34,7 +34,6 @@ namespace OrderViewer.Web.Controllers
             
             var orders = await _orderService.GetOrdersAsync(orderFilter);
 
-            Console.WriteLine($"the total pages: {orders.TotalPages}");
             if (orders.TotalPages > 0 && orderFilter.PageNumber > orders.TotalPages)
             {
                 orderFilter.PageNumber = orders.TotalPages;
@@ -61,6 +60,19 @@ namespace OrderViewer.Web.Controllers
             }
             return View(orders);
         }
+        public async Task<IActionResult> OrderPaginationPartial([FromQuery] OrderFilter orderFilter)
+        {
+            // Ensure defaults
+            orderFilter.PageNumber = orderFilter.PageNumber <= 0 ? 1 : orderFilter.PageNumber;
+            orderFilter.PageSize = orderFilter.PageSize <= 0 ? 10 : orderFilter.PageSize;
+
+            var orders = await _orderService.GetOrdersAsync(orderFilter);
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") 
+            {
+                return PartialView("_PaginatingPartial", orders);
+            }
+            return PartialView("_PaginatingPartial", orders);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetOrderSummary([FromQuery] OrderFilter filter)
@@ -68,10 +80,7 @@ namespace OrderViewer.Web.Controllers
             // Ensure defaults
             filter.PageNumber = filter.PageNumber <= 0 ? 1 : filter.PageNumber;
             filter.PageSize = filter.PageSize <= 0 ? 10 : filter.PageSize;
-            
-            Console.WriteLine($"filters: {filter.ToString()}");
             var orders = await _orderService.GetOrdersAsync(filter);
-            Console.WriteLine($"Orders: {orders}");
             var summary = new OrderSummary
             {
                 Count = orders.Items.Count,

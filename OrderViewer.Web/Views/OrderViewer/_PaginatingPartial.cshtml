@@ -1,0 +1,14 @@
+﻿<nav>
+	<ul class="pagination">
+		@for (int i = 1; i <= Model.TotalPages; i++)
+		{
+			<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+				<a href="#"
+				   class="page-link"
+				   data-page="@i">
+					@i
+				</a>
+			</li>
+		}
+	</ul>
+</nav>
