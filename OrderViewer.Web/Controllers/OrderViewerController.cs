@@ -34,16 +34,6 @@ namespace OrderViewer.Web.Controllers
             
             var orders = await _orderService.GetOrdersAsync(orderFilter);
 
-            if (orders.TotalPages > 0 && orderFilter.PageNumber > orders.TotalPages)
-            {
-                orderFilter.PageNumber = orders.TotalPages;
-                orders = await _orderService.GetOrdersAsync(orderFilter);
-            }
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                return PartialView("_OrderTablePartial", orders); // Return partial view on AJAX
-            }
-
             ViewBag.Filter = orderFilter;
             ViewBag.StatusOptions = Enum.GetValues(typeof(OrderStatus))
                 .Cast<OrderStatus>()
@@ -60,34 +50,33 @@ namespace OrderViewer.Web.Controllers
             }
             return View(orders);
         }
-        public async Task<IActionResult> OrderPaginationPartial([FromQuery] OrderFilter orderFilter)
+
+        [HttpGet]
+        public async Task<IActionResult> OrderViewerData([FromQuery] OrderFilter orderFilter)
         {
             // Ensure defaults
             orderFilter.PageNumber = orderFilter.PageNumber <= 0 ? 1 : orderFilter.PageNumber;
             orderFilter.PageSize = orderFilter.PageSize <= 0 ? 10 : orderFilter.PageSize;
 
             var orders = await _orderService.GetOrdersAsync(orderFilter);
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") 
-            {
-                return PartialView("_PaginatingPartial", orders);
-            }
-            return PartialView("_PaginatingPartial", orders);
-        }
 
-        [HttpGet]
-        public async Task<IActionResult> GetOrderSummary([FromQuery] OrderFilter filter)
-        {
-            // Ensure defaults
-            filter.PageNumber = filter.PageNumber <= 0 ? 1 : filter.PageNumber;
-            filter.PageSize = filter.PageSize <= 0 ? 10 : filter.PageSize;
-            var orders = await _orderService.GetOrdersAsync(filter);
-            var summary = new OrderSummary
+            //render partials as string
+            var tableHtml = await this.RenderViewAsync("_OrderTablePartial", orders, true);
+            var paginationHtml = await this.RenderViewAsync("_PaginatingPartial", orders, true);
+
+            //build summary
+            var summary = new
             {
-                Count = orders.Items.Count,
-                GrandTotal = orders.Items.Sum(o => o.Total)
+                count = orders?.Items.Count ,
+                grandTotal = orders?.Items.Sum(o => o.Total)
             };
 
-            return Json(summary);
+            return Json(new
+            {
+                table = tableHtml,
+                pagination = paginationHtml,
+                summary
+            });
         }
 
         [HttpGet]
