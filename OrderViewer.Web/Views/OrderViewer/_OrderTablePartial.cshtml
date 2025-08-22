@@ -2,16 +2,23 @@
 	<div>
 		@foreach (var order in Model.Items)
 		{
-			<tr style="cursor: pointer;" data-order-id="@order.OrderId" class="order-row" id="order-@order.OrderId">
+			var isPaid = order.Status == OrderStatus.Paid.ToString();
+			var isCancelled = order.Status == OrderStatus.Cancelled.ToString();
+
+			<tr style="cursor: pointer;" 
+				data-order-id="@order.OrderId" 
+				class="order-row @(isPaid ? "paid-row" : isCancelled ? "cancelled-row" : "") " 
+				id="order-@order.OrderId"
+			>
 				<td data-label="OrderId">@order.OrderId</td>
 				<td data-label="Customer">@order.Customer</td>
 				<td data-label="Status">@order.Status</td>
 				<td data-label="Total">@((order.Total).ToString("c"))</td>
 				<td data-label="CreatedAt">@order.CreatedAt</td>
-				<td>
-					@if (order.Status != OrderStatus.Paid.ToString())
+				<td data-label="Paid">
+					@if (order.Status != OrderStatus.Cancelled.ToString())
 					{
-						<button class="btn btn-sm btn-success" onclick="markPaid('@order.OrderId')">Mark Paid</button>
+						<input type="checkbox" class="mark-paid-checkbox" data-order-id="@order.OrderId" @(isPaid ? "checked disabled" : "") />
 					}
 				</td>
 			</tr>
