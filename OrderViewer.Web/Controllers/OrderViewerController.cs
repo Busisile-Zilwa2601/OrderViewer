@@ -16,6 +16,8 @@ namespace OrderViewer.Web.Controllers
         {
             _orderService = orderService;
         }
+
+        [HttpGet]
         public async Task<IActionResult> GetOrderItems(Guid orderId)
         {
             var allItems = await _orderService.GetProductsByOrderId(orderId);
@@ -26,6 +28,7 @@ namespace OrderViewer.Web.Controllers
             }
             return PartialView("_OrderItems", allItems.Result);
         }
+        
         public async Task<IActionResult> OrderViewerIndex([FromQuery] OrderFilter orderFilter)
         {
             // Ensure defaults
@@ -119,19 +122,31 @@ namespace OrderViewer.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> MarkOrderAsPaid(Guid orderId)
+        [HttpPost("/OrderViewer/MarkOrderPaid/{orderId}")]
+        public async Task<IActionResult> MarkOrderAsPaid(string orderId)
         {
-            var order = await _orderService.GetOrderByIdAsync(orderId);
-            if (order == null || !order.IsSuccess) 
+            if (string.IsNullOrEmpty(orderId))
+                return BadRequest(new { success = false, message = "Order ID required" });
+
+            var order = await _orderService.GetOrderByIdAsync(Guid.Parse(orderId));
+            if (order == null)
+                return NotFound(new { success = false, message = "Order not found" });
+
+            if (order.Status == OrderStatus.Paid.ToString())
+                return Json(new { success = true, message = "Order already paid" });
+
+
+            var mappedOrder = new OrderDto
             {
-                return BadRequest("No order found");
-            }
+                OrderId = order.OrderId,
+                Customer = order.Customer,
+                Status = OrderStatus.Paid.ToString(),
+                CreatedAt = order.CreatedAt,
+                Total = order.Total
+            };
+            var results = await _orderService.UpdateOrderAysnc(mappedOrder);
 
-            order.Result.Status = OrderStatus.Paid.ToString();
-            await _orderService.UpdateOrderAysnc(order.Result);
-
-            return PartialView("_OrderRowPartial", order);
+            return Json(new { success = true, message = "Order marked as paid" });
         }
 
     }

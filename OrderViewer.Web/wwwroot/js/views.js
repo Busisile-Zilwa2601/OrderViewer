@@ -51,4 +51,47 @@
         e.preventDefault();
         fetchData({ PageNumber: link.dataset.page });
     });
+
+    //mark paid checkbox
+    document.addEventListener("change", async function (e) {
+        const checkbox = e.target.closest(".mark-paid-checkbox");
+        if (!checkbox) return;
+        e.preventDefault();
+        console.log(checkbox);
+        const orderId = checkbox.getAttribute("data-order-id");
+        const spinner = document.getElementById("table-spinner");
+
+        try {
+            //show spinner
+            spinner.style.display = "flex";
+
+            const response = await fetch(`/OrderViewer/MarkOrderPaid/${orderId}`, {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const results = await response.json();
+            if (!results.success) {
+                throw new Error(results.message || "Failed to mark paid");
+            }
+
+            //Update Row
+            const row = document.querySelector(`#order-${orderId}`);
+            row.classList.add("paid-row");
+            checkbox.disabled = true;
+
+            //reload the with the paramaters
+            fetchData();
+
+        } catch (err) {
+            console.error(err);
+            checkbox.checked = false;
+        } finally {
+            //hide spinner
+            spinner.style.display = "none";
+        }
+    })
 });
