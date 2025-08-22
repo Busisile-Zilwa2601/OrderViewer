@@ -41,6 +41,9 @@ namespace OrderViewer.Web.Services
                     case ApiType.PUT:
                         message.Method = HttpMethod.Put;
                         break;
+                    case ApiType.PATCH:
+                        message.Method = HttpMethod.Patch;
+                        break;
                     case ApiType.DELETE:
                         message.Method = HttpMethod.Delete;
                         break;

@@ -125,6 +125,13 @@ button:active {
     font-weight: bold;
 }
 
+.paid-row {
+    background-color: #d4edda; /* light green */
+}
+
+.cancelled-row {
+    background-color: #ff4d4d;
+}
 /* === Responsive Design === */
 @media (max-width: 768px) {
     .col-9, .col-2 {

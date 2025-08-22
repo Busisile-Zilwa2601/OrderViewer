@@ -61,13 +61,21 @@ namespace OrderViewer.Web.Services
             return urlWithQuery;
         }
 
-        public Task<ResponseDto<OrderDto>?> GetOrderByIdAsync(Guid orderId)
+        public async Task<OrderDto?> GetOrderByIdAsync(Guid orderId)
         {
-            return _baseService.SendAsync<OrderDto>(new RequestDto()
+            var response = await _baseService.SendAsync<OrderDto>(new RequestDto()
             {
                 ApiType = SD.ApiType.GET,
                 ApiUrl = SD.OrderAPIBase + "/api/order/" + orderId
             });
+
+            if (response != null && response.IsSuccess && response.Message != null)
+            {
+                return response.Result;
+            }
+
+            return null;
+
         }
 
         public async Task<ResponseDto<OrderDto>?> CreateOrderAysnc(OrderDto orderDto)
